@@ -3,26 +3,13 @@ import { db } from "../db/dbProvider";
 import * as bcrypt from 'bcrypt';
 import { logger } from "../logger";
 import StatusCodes from 'http-status-codes';
+import {
+    ILoginRequest,
+    ILoginResponse,
+    IRegisterRequest
+} from "../contracts/user.contracts";
 
 export const usersRouter = express.Router();
-
-export interface IRegisterRequest {
-    name: string;
-    login: string;
-    password: string;
-}
-
-export interface ILoginRequest {
-    login: string;
-    password: string;
-}
-
-export interface ILoginResponse {
-    id: number;
-    name: string;
-    login: string;
-    salt: string;
-}
 
 usersRouter.get('/', async(request: Request, response: Response) => {
     const users = await db.any('SELECT id, name, login FROM users');
@@ -60,10 +47,15 @@ usersRouter.post('/login', async(request: Request, response: Response) => {
     }
 
     const isValidPassword = await bcrypt.compare(password, userData[0].salt);
-
     if (!isValidPassword) {
         return response.status(StatusCodes.FORBIDDEN).send('A password is not correct');
     }
 
+    response.cookie('isAuthenticated', true, {maxAge: 1000 * 20});
     return response.json(`You've successfully logged in`);
+});
+
+usersRouter.post('/logout', async(request: Request, response: Response) => {
+    response.clearCookie('isAuthenticated');
+    return response.json(`You've successfully logged out`);
 });
