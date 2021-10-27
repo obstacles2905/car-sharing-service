@@ -41,7 +41,7 @@ bookingsRouter.get('/',
 
 bookingsRouter.post('/',
     body('userId', 'userId should be a number').isNumeric(),
-    body('userId', 'amenityId should be a number').isNumeric(),
+    body('amenityId', 'amenityId should be a number').isNumeric(),
     body('startTime', 'startTime should be a 3 or 4 digits number describing a number of minutes since 00:00').isNumeric(),
     body('endTime', 'endTime should be a 3 or 4 digits number describing a number of minutes since 00:00').isNumeric(),
     body('timestamp', 'timestamp should be a timestamp in milliseconds').isNumeric(),
@@ -53,7 +53,7 @@ bookingsRouter.post('/',
 
         const {userId, amenityId, startTime, endTime, timestamp} = request.body as IPostBookingRequest;
 
-        const isUserAlreadyHavingAmenity = await db.any(`SELECT * FROM bookings WHERE user_id = '${userId}' AND (end_time > '${endTime}' AND start_time < '${endTime}')`);
+        const isUserAlreadyHavingAmenity = await db.any(`SELECT * FROM bookings WHERE user_id = '${userId}' AND (end_time >= '${endTime}' AND start_time <= '${endTime}')`);
         if (isUserAlreadyHavingAmenity.length > 0) {
             return response.status(StatusCodes.BAD_REQUEST).send('User is already having an amenity at this time');
         }
