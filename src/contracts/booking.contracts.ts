@@ -25,5 +25,5 @@ export interface IPostBookingRequest {
     amenityId: number;
     startTime: number;
     endTime: number;
-    date: number;
+    timestamp: number;
 }

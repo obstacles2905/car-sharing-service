@@ -25,12 +25,10 @@ CREATE TABLE bookings (
             REFERENCES amenities(id)
 );
 
-drop table bookings;
-
 INSERT INTO users (name, login, salt) VALUES
-    ('User1', 'userLogin1', 'userSalt1'),
-    ('User2', 'userLogin2', 'userSalt2'),
-    ('User3', 'userLogin3', 'userSalt3');
+    ('User1', 'userLogin1', '$2b$05$Z3Gqj82M97lS1bikajFcxemlcZ6n7L9nJzZDTNxMqTpmVWdSXX0Fa'),
+    ('User2', 'userLogin2', '$2b$05$Z3Gqj82M97lS1bikajFcxemlcZ6n7L9nJzZDTNxMqTpmVWdSXX0Fa'),
+    ('User3', 'userLogin3', '$2b$05$Z3Gqj82M97lS1bikajFcxemlcZ6n7L9nJzZDTNxMqTpmVWdSXX0Fa');
 
 INSERT INTO amenities (name) VALUES ('Massage room'), ('Gym'), ('Cinema'), ('Computer club');
 

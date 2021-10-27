@@ -16,5 +16,5 @@ RUN npm ci --quiet --only=production
 ## We just need the build to execute the command
 COPY . .
 
-EXPOSE 8083
-CMD ["node", "./dist/server.js"]
+EXPOSE 8080
+CMD ["node", "./src/dist/server.js"]

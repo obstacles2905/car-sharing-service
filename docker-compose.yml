@@ -5,12 +5,12 @@ services:
     container_name: amenity-service-postgres
     image: postgres
     environment:
+      POSTGRES_DB: amenity
       POSTGRES_USER: ${POSTGRES_USER:-admin}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
       PGDATA: /data/postgres
-      POSTGRES_DATABASE: ${POSTGRES_DB:-amenity}
     volumes:
-      - postgres:/data/postgres
+      - ./src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     networks:
