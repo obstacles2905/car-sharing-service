@@ -72,3 +72,10 @@ yarn start
 ```
 
 After performing those operations a server will start. A default port is 8080.
+
+## Tests
+To properly launch tests you need to bootstrap a postgres image from a docker-compose first
+
+```bash
+yarn test
+```
