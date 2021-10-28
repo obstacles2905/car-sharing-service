@@ -3,6 +3,7 @@ import StatusCodes from 'http-status-codes';
 import moment = require("moment");
 import {db} from "../db/dbProvider";
 import {
+    IDeleteBookingRequest,
     IGetBookingsRequest,
     IGetBookingsResponse,
     IGetBookingsResponseTransformed,
@@ -42,8 +43,8 @@ bookingsRouter.get('/',
 bookingsRouter.post('/',
     body('userId', 'userId should be a number').isNumeric(),
     body('amenityId', 'amenityId should be a number').isNumeric(),
-    body('startTime', 'startTime should be a 3 or 4 digits number describing a number of minutes since 00:00').isNumeric(),
-    body('endTime', 'endTime should be a 3 or 4 digits number describing a number of minutes since 00:00').isNumeric(),
+    body('startTime', 'startTime should be a 2-4 digits number describing a number of minutes since 00:00').isNumeric(),
+    body('endTime', 'endTime should be a 2-4 digits number describing a number of minutes since 00:00').isNumeric(),
     body('timestamp', 'timestamp should be a timestamp in milliseconds').isNumeric(),
     async(request: Request, response: Response) => {
         const errors = validationResult(request);
@@ -77,7 +78,7 @@ bookingsRouter.get('/:userId',
 
         const {userId} = request.params;
         const userBookings: IGetBookingsResponse[] = await db.any(`SELECT * FROM bookings WHERE user_id = '${userId}' ORDER BY date`);
-        const userBookingsTransformed =userBookings.map(booking => ({
+        const userBookingsTransformed = userBookings.map(booking => ({
             bookingId: booking.id,
             userId: booking.user_id,
             startTime: booking.start_time,
@@ -85,4 +86,25 @@ bookingsRouter.get('/:userId',
             date: moment.unix(Number(booking.date)/1000).startOf('day')
         }));
         return response.json(userBookingsTransformed);
+});
+
+bookingsRouter.delete('/',
+    body('userId', 'userId should be a number').isNumeric(),
+    body('amenityId', 'amenityId should be a number').isNumeric(),
+    body('startTime', 'startTime should be a 3 or 4 digits number describing a number of minutes since 00:00').isNumeric(),
+    body('endTime', 'endTime should be a 3 or 4 digits number describing a number of minutes since 00:00').isNumeric(),
+    async(request: Request, response: Response) => {
+        const errors = validationResult(request);
+        if (!errors.isEmpty()) {
+            return response.status(StatusCodes.BAD_REQUEST).json({errors: errors.array()});
+        }
+
+        const {userId, amenityId, startTime, endTime} = request.body as IDeleteBookingRequest;
+
+        const result = await db.any(`DELETE FROM bookings WHERE user_id = '${userId}' AND amenity_id = '${amenityId}' AND start_time = '${startTime}' AND end_time = '${endTime}'`);
+        if (result.length === 0) {
+            return response.status(StatusCodes.ACCEPTED).send(`A booking with such credentials doesn't exist`);
+        }
+
+        return response.status(StatusCodes.ACCEPTED).send('A booking has successfully been deleted');
 });

@@ -71,3 +71,14 @@ usersRouter.post('/logout', async(request: Request, response: Response) => {
     response.clearCookie('isAuthenticated');
     return response.json(`You've successfully logged out`);
 });
+
+usersRouter.delete('/', body('userId', 'userId should be a number').isNumeric(), async(request: Request, response: Response) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+        return response.status(StatusCodes.BAD_REQUEST).json({errors: errors.array()});
+    }
+
+    const {userId} = request.body;
+    await db.any(`DELETE FROM users WHERE id = '${userId}'`);
+    return response.json(`User ${userId} has been deleted`);
+});

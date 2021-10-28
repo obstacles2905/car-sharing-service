@@ -20,6 +20,8 @@ export interface IGetBookingsResponseTransformed {
     amenityName: string;
 }
 
+export type IDeleteBookingRequest = IPostBookingRequest;
+
 export interface IPostBookingRequest {
     userId: number;
     amenityId: number;

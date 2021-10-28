@@ -11,7 +11,7 @@ import cookieParser = require("cookie-parser");
 
 const port = process.env.APPLICATION_PORT;
 
-const app = express();
+export const app = express();
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -23,4 +23,6 @@ app.use('/bookings', bookingsRouter);
 app.use('/csv', csvRouter);
 app.use('/users', usersRouter);
 
-app.listen(port, () => {logger.info(`Server is running on ${port}`)});
+if (process.env.NODE_ENV !== 'test') {
+    app.listen(port, () => {logger.info(`Server is running on ${port}`)});
+}

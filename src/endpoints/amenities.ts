@@ -20,3 +20,19 @@ amenitiesRouter.post('/', body('name', 'name should be a string').isString(), as
     await db.any(`INSERT INTO amenities (name) VALUES ('${name}')`);
     return response.status(StatusCodes.ACCEPTED).send('An amenity has successfully been added')
 });
+
+amenitiesRouter.delete('/', body('name','name should be a string').isString(), async(request: Request, response: Response) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+        return response.status(StatusCodes.BAD_REQUEST).json({errors: errors.array()});
+    }
+
+    const {name} = request.body;
+    const result = await db.any(`DELETE FROM amenities WHERE name= '${name}'`);
+
+    if (result.length === 0) {
+        return response.status(StatusCodes.ACCEPTED).send(`An amenity with such name doesn't exist`);
+    }
+
+    return response.status(StatusCodes.ACCEPTED).send('An amenity has successfully been deleted');
+});

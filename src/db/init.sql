@@ -5,6 +5,8 @@ CREATE TABLE users (
     salt varchar NOT NULL
 );
 
+CREATE UNIQUE INDEX login_unique_idx on users (LOWER(login));
+
 CREATE TABLE amenities (
     id SERIAL PRIMARY KEY,
     name varchar(30) UNIQUE NOT NULL
