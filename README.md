@@ -1,15 +1,14 @@
-# Amenity Service
+# Car sharing service
 
 ## Description
 
-An amenity service is an app that stores users, amenities and bookings data
+Service to comfortably rent cars
 
 ## Endpoints
 
-### Amenities
+### Balance
 
-1. GET /amenities - list all amenities
-2. POST /amenities - add a new amenity. Endpoint requires a name parameter
+TBD
 
 ### Users
 
@@ -17,15 +16,15 @@ An amenity service is an app that stores users, amenities and bookings data
 2. POST /users/register - register user. Endpoint requires three fields: name, login and password
 3. POST /users/login - login user. Endpoint requires two fields: login and password
 
-### Bookings
+### Cars
 
-1. GET /bookings/ - get all bookings for a listed amenity id and a listed timestamp. Endpoint requires two fields: amenitiyId and timestamp
-2. POST /bookings - add a new booking. Endpoint requires a number of fields: userId, amenityId, startTime, endTime, date.
-3. GET /bookings/:userId - get all bookings made by a specific user. Endpoint requires userId
+TBD
 
-### Csv
+### Car locations
 
-1. POST /csv - process a csv file and get JSON parsed data. An endpoint requires user to be logged in the system by a POST /login endpoint 
+TBD 
+### Orders
+
 
 ## Environment
 Required environment variables

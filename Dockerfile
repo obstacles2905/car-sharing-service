@@ -1,7 +1,7 @@
 FROM node:14-alpine as builder
 
 WORKDIR /usr/src/app
-COPY . /usr/src/app
+COPY .. /usr/src/app
 
 RUN npm ci --quiet && npm run build
 
@@ -14,7 +14,7 @@ COPY package*.json ./
 RUN npm ci --quiet --only=production
 
 ## We just need the build to execute the command
-COPY . .
+COPY .. .
 
 EXPOSE 8080
 CMD ["node", "./src/dist/server.js"]
