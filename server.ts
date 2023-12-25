@@ -12,6 +12,7 @@ import {carsController} from "./src/controllers/cars.controller";
 import {carLocationsController} from "./src/controllers/car-locations.controller";
 import {balanceController} from "./src/controllers/balance.controller";
 import {ordersController} from "./src/controllers/order.controller";
+import morgan from "morgan";
 
 dotenv.config();
 
@@ -19,10 +20,11 @@ const port = process.env.APPLICATION_PORT;
 
 export const app = express();
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(morgan('combined'));
 
 app.use('/balance', balanceController);
 app.use('/cars', carsController);
