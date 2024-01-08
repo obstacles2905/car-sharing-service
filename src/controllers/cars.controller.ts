@@ -9,7 +9,16 @@ export const carsController = express.Router();
 carsController.get('/', async (request: Request, response: Response) => {
     const cars = await dataSourceManager.find(CarEntity, {});
     return response.json(cars);
-})
+});
+
+carsController.get('/available', async (request: Request, response: Response) => {
+    const cars = await dataSourceManager.find(CarEntity, {
+        where: {
+            status: CarStatusEnum.AVAILABLE
+        }
+    });
+    return response.json(cars);
+});
 
 carsController.get('/:id', async (request: Request, response: Response) => {
     try {
@@ -44,6 +53,7 @@ carsController.get('/', async (request: Request, response: Response) => {
         response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error: err });
     }
 })
+
 
 carsController.post('/',
     body('brand').isString(),
