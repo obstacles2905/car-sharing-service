@@ -1,4 +1,7 @@
 export interface IRegisterRequest {
+	firstName: string;
+	lastName: string;
+	phoneNumber: string;
     email: string;
     login: string;
     password: string;

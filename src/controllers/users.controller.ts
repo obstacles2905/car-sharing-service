@@ -39,7 +39,7 @@ usersController.post('/register',
             return response.status(StatusCodes.BAD_REQUEST).json({errors: errors.array()});
         }
 
-        const {email, password} = request.body as IRegisterRequest;
+        const {email, password, firstName, lastName, phoneNumber} = request.body as IRegisterRequest;
 
         const userExists = await dataSourceManager.findOne(UserEntity, {where: { email }});
         if (userExists) {
@@ -49,7 +49,7 @@ usersController.post('/register',
         const salt = await bcrypt.genSalt(SALT_ROUNDS);
         const encryptedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = await dataSourceManager.save(UserEntity, {email, password: encryptedPassword});
+        const newUser = await dataSourceManager.save(UserEntity, {firstName, lastName, phoneNumber, email, password: encryptedPassword});
         return response.json({ message: `You've successfully registered`, userId: newUser.id });
 });
 
